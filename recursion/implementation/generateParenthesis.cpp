@@ -1,47 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void outside(int n, string &s) {
-  s.push_back('(');
-  if (n == 1) {
-    s.push_back(')');
-    return;
+class Solution {
+private:
+  void generateAns(int open, int close, int n, string s,
+                   vector<string> &answer) {
+    if (open == close && (open + close) == 2 * n) {
+      answer.push_back(s);
+      return;
+    }
+    if (open < n) {
+      generateAns(open + 1, close, n, s + "(", answer);
+    }
+    if (close < open) {
+      generateAns(open, close + 1, n, s + ")", answer);
+    }
   }
-  s.push_back(')');
-  outside(n - 1, s);
-}
 
-void inside(int n, string &s) {
-  s.push_back('(');
-  if (n == 1) {
-    s.push_back(')');
-    return;
+public:
+  vector<string> generateParenthesis(int n) {
+    vector<string> answer;
+    int open = 0;
+    int close = 0;
+    generateAns(open, close, n, "", answer);
+    return answer;
   }
-  outside(n - 1, s);
-  s.push_back(')');
-}
-
-void generateAnswer(int n, vector<string> &answer) {
-  string s = "";
-  if (n == 1) {
-    outside(1, s);
-    answer.push_back(s);
-    return;
-  }
-  s = "";
-  s.push_back('(');
-}
-
-vector<string> generateP(int n) {
-  vector<string> answer;
-  generateAnswer(n, answer);
-  return answer;
-}
-int main() {
-  int n = 3;
-  vector<string> answer = generateP(n);
-  for (int i = 0; i < answer.size(); i++) {
-    cout << answer[i] << endl;
-  }
-  return 0;
-}
+};
